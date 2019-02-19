@@ -1,3 +1,23 @@
+function createStore(reducer) {
+  let state;
+
+  function dispatch(action) {
+    state = reducer(state, action);
+    render();
+  }
+
+  function getState() {
+    return state;
+  }
+
+  return {
+    dispatch,
+    getState
+  };
+};
+
+
+
 let state;
 
 function changeCount(state = { count: 0 }, action) {
@@ -9,18 +29,20 @@ function changeCount(state = { count: 0 }, action) {
       return state;
   }
 };
-
-function dispatch(action){
-  state = changeCount(state, action);
-  render();
-};
+//
+// function dispatch(action){
+//   state = changeCount(state, action);
+//   render();
+// };
 
 function render() {
   let container = document.getElementById('container');
   container.textContent = state.count;
 };
 
-dispatch({ type: '@@INIT' })
+let store = createStore(changeCount);
+store.dispatch({ type: '@@INIT' });
+// dispatch({ type: '@@INIT' })
 let button = document.getElementById('button');
 
 button.addEventListener('click', function() {
